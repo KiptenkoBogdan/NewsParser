@@ -13,18 +13,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
-public class JsonConverter {
-    public static NewsPojo createObject(String json){
+public class JsonConverter{
+    public NewsPojo createObject(String json){
         NewsPojo np = new NewsPojo();
         JSONObject newsJsonObject = new JSONObject(json);
 
         JSONArray weatherArray = (JSONArray) newsJsonObject.get("sources");
-        np.setSources(new Pojo[weatherArray.length()]);
+        np.setSources(new ArrayList(weatherArray.length()));
 
-        for (int i=0; i<weatherArray.length(); i++){
-            np.getSources()[i] = createPojo((JSONObject) weatherArray.get(i));
-            System.out.println(np.getSources()[i]);
+        for (int i = 0; i < weatherArray.length(); i++){
+            try{
+                np.getSources().add(createPojo((JSONObject) weatherArray.get(i)));
+                System.out.println(np.getSources().get(i));
+            }catch (NullPointerException e){
+                System.out.println(e);
+            }
         }
         return np;
     }

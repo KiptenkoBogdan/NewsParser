@@ -1,13 +1,15 @@
 package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 
-public class NewsPojo {
-    private Pojo[] sources;
+import java.util.ArrayList;
 
-    public Pojo[] getSources() {
+public class NewsPojo {
+    private ArrayList<Pojo> sources;
+
+    public ArrayList<Pojo> getSources() {
         return sources;
     }
 
-    public void setSources(Pojo[] sources) {
+    public void setSources(ArrayList<Pojo> sources) {
         this.sources = sources;
     }
 }
