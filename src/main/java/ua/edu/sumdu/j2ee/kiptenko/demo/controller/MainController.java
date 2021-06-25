@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ua.edu.sumdu.j2ee.kiptenko.demo.model.DocumentGenerator;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -20,6 +21,8 @@ public class MainController {
     @Autowired
     private Environment env;
 
+    private DocumentGenerator docGen = new DocumentGenerator();
+
     //private static String baseURLsources = "https://newsapi.org/v2/sources";
     //private static String apiKey = "?apiKey=629909da42254cd28c952adb9d926de4";
 
@@ -28,7 +31,7 @@ public class MainController {
             @RequestParam(value = "category", defaultValue = "sports") String category) {
         ResponseEntity<InputStreamResource> result = null;
         try {
-            result = DocumentController.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+            result = docGen.getDocument("&category=" + category);
         } catch (IOException | URISyntaxException e) {
             System.out.println(e);
         }
@@ -40,7 +43,7 @@ public class MainController {
             @RequestParam(value = "language", defaultValue = "ua") String language) {
         ResponseEntity<InputStreamResource> result = null;
         try {
-            result = DocumentController.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"), "&language=" + language);
+            result = docGen.getDocument("&language=" + language);
         } catch (IOException | URISyntaxException e) {
             System.out.println(e);
         }
@@ -52,7 +55,7 @@ public class MainController {
             @RequestParam(value = "country", defaultValue = "ua") String country) {
         ResponseEntity<InputStreamResource> result = null;
         try {
-            result = DocumentController.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"), "&country=" + country);
+            result = docGen.getDocument("&country=" + country);
         } catch (IOException | URISyntaxException e) {
             System.out.println(e);
         }
