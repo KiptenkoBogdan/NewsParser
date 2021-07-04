@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.edu.sumdu.j2ee.kiptenko.demo.model.DocumentGenerator;
+import ua.edu.sumdu.j2ee.kiptenko.demo.model.JsonGenerator;
+import ua.edu.sumdu.j2ee.kiptenko.demo.model.XmlGenerator;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 @RestController
 @PropertySource({"classpath:application.properties"})
@@ -22,16 +25,19 @@ public class MainController {
     private Environment env;
 
     private DocumentGenerator docGen = new DocumentGenerator();
+    private JsonGenerator jsonGen = new JsonGenerator();
+    private XmlGenerator xmlGen = new XmlGenerator();
 
     //private static String baseURLsources = "https://newsapi.org/v2/sources";
     //private static String apiKey = "?apiKey=629909da42254cd28c952adb9d926de4";
 
+    //News in .docx format
     @RequestMapping(value = "/getDocument/bycategory")
-    public ResponseEntity<InputStreamResource> getNewsByCategory(
+    public ResponseEntity<InputStreamResource> getNewsByCategoryDoc(
             @RequestParam(value = "category", defaultValue = "sports") String category) {
         ResponseEntity<InputStreamResource> result = null;
         try {
-            result = docGen.getDocument("&category=" + category);
+            result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
         } catch (IOException | URISyntaxException e) {
             System.out.println(e);
         }
@@ -39,11 +45,11 @@ public class MainController {
     }
 
     @RequestMapping(value = "/getDocument/bylanguage")
-    public ResponseEntity<InputStreamResource> getNewsByLanguage(
+    public ResponseEntity<InputStreamResource> getNewsByLanguageDoc(
             @RequestParam(value = "language", defaultValue = "ua") String language) {
         ResponseEntity<InputStreamResource> result = null;
         try {
-            result = docGen.getDocument("&language=" + language);
+            result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
         } catch (IOException | URISyntaxException e) {
             System.out.println(e);
         }
@@ -51,80 +57,121 @@ public class MainController {
     }
 
     @RequestMapping(value = "/getDocument/bycountry")
-    public ResponseEntity<InputStreamResource> getNewsByCountry(
+    public ResponseEntity<InputStreamResource> getNewsByCountryDoc(
             @RequestParam(value = "country", defaultValue = "ua") String country) {
         ResponseEntity<InputStreamResource> result = null;
         try {
-            result = docGen.getDocument("&country=" + country);
+            result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
         } catch (IOException | URISyntaxException e) {
             System.out.println(e);
         }
         return result;
     }
-    //    private static JSONObject getRequest(String parameters) throws IOException {
-//        String sURL = baseURLsources + apiKey + parameters;
+
+    // localhost:8080/getJSON/bycategory?category=sports
+
+    //News in JSON format
+    @RequestMapping(value = "/getJSON/bycategory")
+    public Map<String, Object> getNewsByCategoryJson(@RequestParam(value = "category", defaultValue = "sports") String category) {
+        Map<String, Object> result = null;
+        try {
+            result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/getJSON/bylanguage")
+    public Map<String, Object> getNewsByLanguageJson(@RequestParam(value = "language", defaultValue = "ua") String language) {
+        Map<String, Object> result = null;
+        try {
+            result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/getJSON/bycountry")
+    public Map<String, Object> getNewsByCountryJson(@RequestParam(value = "country", defaultValue = "ua") String country) {
+        Map<String, Object> result = null;
+        try {
+            result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
+
+
+    // localhost:8080/getXML/bycategory?category=sports
+
+    //News in XML format
+    @RequestMapping(value = "/getXML/bycategory")
+    public String getNewsByCategoryXML(@RequestParam(value = "category", defaultValue = "sports") String category) {
+        String result = null;
+        try {
+            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/getXML/bylanguage")
+    public String getNewsByLanguageXML(@RequestParam(value = "language", defaultValue = "ua") String language) {
+        String result = null;
+        try {
+            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/getXML/bycountry")
+    public String getNewsByCountryXML(@RequestParam(value = "country", defaultValue = "ua") String country) {
+        String result = null;
+        try {
+            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
+
+//    @RequestMapping(value = "/getXML/bycategory")
+//    public Map<String, String> getNewsByCategoryXML(@RequestParam(value = "category", defaultValue = "sports") String category) {
+//        Map<String, String> result = null;
+//        try {
+//            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+//        } catch (IOException e) {
+//            System.out.println(e);
+//        }
+//        return result;
+//    }
 //
-//        URL url = new URL(sURL);
-//        HttpURLConnection request = (HttpURLConnection) url.openConnection();
-//        request.setRequestMethod("GET");
-//        request.connect();
+//    @RequestMapping(value = "/getXML/bylanguage")
+//    public Map<String, String> getNewsByLanguageXML(@RequestParam(value = "language", defaultValue = "ua") String language) {
+//        Map<String, String> result = null;
+//        try {
+//            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
+//        } catch (IOException e) {
+//            System.out.println(e);
+//        }
+//        return result;
+//    }
 //
-//        JSONObject result = JsonConverter.parseJSON(request.getInputStream());
-//
-//        request.disconnect();
-//
+//    @RequestMapping(value = "/getXML/bycountry")
+//    public Map<String, String> getNewsByCountryXML(@RequestParam(value = "country", defaultValue = "ua") String country) {
+//        Map<String, String> result = null;
+//        try {
+//            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
+//        } catch (IOException e) {
+//            System.out.println(e);
+//        }
 //        return result;
 //    }
 
-//    @GetMapping("/api/news/bycountry/xml")
-//    String getNewsByCountryXml(@RequestParam(value = "country") String country) throws IOException {
-//        return getXMLRequest("&country=" + country);
-//    }
-//    @GetMapping("/api/news/bycategory/xml")
-//    String getNewsByCategotyXml(@RequestParam(value = "category") String category) throws IOException {
-//        return getXMLRequest("&category=" + category);
-//    }
-//    @GetMapping("/api/news/bylanguage/xml")
-//    String getNewsByLanguageXml(@RequestParam(value = "language") String language) throws IOException {
-//        return getXMLRequest("&language=" + language);
-//    }
-
-//    private static String getXMLRequest(String parameters) throws IOException {
-//        String sURL = baseURLsources + parameters;
-//
-//        URL url = new URL(sURL);
-//        HttpURLConnection request = (HttpURLConnection)url.openConnection();
-//        request.setRequestMethod("GET");
-//        request.connect();
-//
-//        String result = parseXML(request.getInputStream());
-//
-//        request.disconnect();
-//
-//        return result;
-//    }
-
-//    private static String parseXML(InputStream stream) throws IOException {
-//        BufferedReader in = new BufferedReader(new InputStreamReader(stream));
-//        String inputLine;
-//        StringBuilder content = new StringBuilder();
-//        while ((inputLine = in.readLine()) != null) {
-//            content.append(inputLine);
-//        }
-//        in.close();
-//
-//        JSONObject jsonObject = null;
-//        try {
-//            jsonObject = new JSONObject(content.toString());
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        String xml = null;
-//        try {
-//            xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>\n<root>" + XML.toString(jsonObject) + "</root>";
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return xml;
-//    }
 }

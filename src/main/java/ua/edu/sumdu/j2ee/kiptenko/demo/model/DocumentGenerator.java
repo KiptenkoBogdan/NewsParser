@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import ua.edu.sumdu.j2ee.kiptenko.demo.converter.TemplateGenerator;
 import ua.edu.sumdu.j2ee.kiptenko.demo.converter.JsonConverter;
-import ua.edu.sumdu.j2ee.kiptenko.demo.model.NewsPojo;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -23,8 +22,9 @@ public class DocumentGenerator {
 
     private final JsonConverter jc = new JsonConverter();
 
-    public ResponseEntity<InputStreamResource> getDocument(String keyWord) throws IOException, URISyntaxException {
-        String str = jc.getStringJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"), keyWord);
+    public ResponseEntity<InputStreamResource> getDocument(String baseURLsourses, String apiKey, String keyWord) throws IOException, URISyntaxException {
+        //String str = jc.getStringJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"), keyWord);
+        String str = jc.getStringJson(baseURLsourses, apiKey, keyWord);
         NewsPojo nptest = jc.createObject(str);
 
         byte[] doc = TemplateGenerator.generateTemplate(nptest);
