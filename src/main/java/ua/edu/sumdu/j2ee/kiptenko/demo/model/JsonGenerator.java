@@ -1,5 +1,6 @@
 package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,15 +13,19 @@ import java.util.Map;
 
 public class JsonGenerator {
 
+    private static final Logger logger = Logger.getLogger(JsonGenerator.class);
+
     public Map<String, Object> getJson(String baseURLsourses, String apiKey, String keyWord) throws IOException {
         String sURL = baseURLsourses + apiKey + keyWord;
 
+        //connecting to NewsAPI service
         URL url = new URL(sURL);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
         request.connect();
+        logger.info("Connected to NewsAPI service");
 
-
+        //retrieving data
         BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String inputLine;
         StringBuilder content = new StringBuilder();
@@ -28,18 +33,22 @@ public class JsonGenerator {
             content.append(inputLine);
         }
         in.close();
+        logger.info("Data retrieved from service");
 
+        //creating JSONObject
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(content.toString());
         } catch (JSONException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
 
-
+        //mapping end result
         Map<String, Object> result = jsonObject.toMap();
 
         request.disconnect();
+        logger.info("Disconnected from NewsAPI service");
+
         return result;
     }
 }

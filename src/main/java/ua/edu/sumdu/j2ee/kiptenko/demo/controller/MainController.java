@@ -1,9 +1,11 @@
 package ua.edu.sumdu.j2ee.kiptenko.demo.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +26,7 @@ public class MainController {
     @Autowired
     private Environment env;
 
+    private static final Logger logger = Logger.getLogger(MainController.class);
     private DocumentGenerator docGen = new DocumentGenerator();
     private JsonGenerator jsonGen = new JsonGenerator();
     private XmlGenerator xmlGen = new XmlGenerator();
@@ -39,7 +42,7 @@ public class MainController {
         try {
             result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
         } catch (IOException | URISyntaxException e) {
-            System.out.println(e);
+            logger.error(e);
         }
         return result;
     }
@@ -51,7 +54,7 @@ public class MainController {
         try {
             result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
         } catch (IOException | URISyntaxException e) {
-            System.out.println(e);
+            logger.error(e);
         }
         return result;
     }
@@ -63,7 +66,7 @@ public class MainController {
         try {
             result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
         } catch (IOException | URISyntaxException e) {
-            System.out.println(e);
+            logger.error(e);
         }
         return result;
     }
@@ -77,7 +80,7 @@ public class MainController {
         try {
             result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error(e);
         }
         return result;
     }
@@ -88,7 +91,7 @@ public class MainController {
         try {
             result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error(e);
         }
         return result;
     }
@@ -99,7 +102,7 @@ public class MainController {
         try {
             result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error(e);
         }
         return result;
     }
@@ -108,35 +111,36 @@ public class MainController {
     // localhost:8080/getXML/bycategory?category=sports
 
     //News in XML format
-    @RequestMapping(value = "/getXML/bycategory")
+
+    @RequestMapping(value = "/getXML/bycategory", produces = MediaType.APPLICATION_XML_VALUE)
     public String getNewsByCategoryXML(@RequestParam(value = "category", defaultValue = "sports") String category) {
         String result = null;
         try {
             result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error(e);
         }
         return result;
     }
 
-    @RequestMapping(value = "/getXML/bylanguage")
+    @RequestMapping(value = "/getXML/bylanguage", produces = MediaType.APPLICATION_XML_VALUE)
     public String getNewsByLanguageXML(@RequestParam(value = "language", defaultValue = "ua") String language) {
         String result = null;
         try {
             result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error(e);
         }
         return result;
     }
 
-    @RequestMapping(value = "/getXML/bycountry")
+    @RequestMapping(value = "/getXML/bycountry", produces = MediaType.APPLICATION_XML_VALUE)
     public String getNewsByCountryXML(@RequestParam(value = "country", defaultValue = "ua") String country) {
         String result = null;
         try {
             result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error(e);
         }
         return result;
     }
@@ -147,7 +151,7 @@ public class MainController {
 //        try {
 //            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
 //        } catch (IOException e) {
-//            System.out.println(e);
+//            logger.error(e);
 //        }
 //        return result;
 //    }
@@ -158,7 +162,7 @@ public class MainController {
 //        try {
 //            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
 //        } catch (IOException e) {
-//            System.out.println(e);
+//            logger.error(e);
 //        }
 //        return result;
 //    }
@@ -169,7 +173,7 @@ public class MainController {
 //        try {
 //            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
 //        } catch (IOException e) {
-//            System.out.println(e);
+//            logger.error(e);
 //        }
 //        return result;
 //    }

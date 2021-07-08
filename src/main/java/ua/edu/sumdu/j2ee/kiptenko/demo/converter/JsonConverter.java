@@ -1,28 +1,29 @@
 package ua.edu.sumdu.j2ee.kiptenko.demo.converter;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import ua.edu.sumdu.j2ee.kiptenko.demo.model.NewsPojo;
 import ua.edu.sumdu.j2ee.kiptenko.demo.model.Pojo;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+@Component
 public class JsonConverter implements Converter<JSONObject, Pojo>{
 
 //    @Autowired
 //    ConversionService conversionService;
+
+    private static final Logger logger = Logger.getLogger(JsonConverter.class);
 
     public NewsPojo createObject(String json){
 
@@ -36,11 +37,12 @@ public class JsonConverter implements Converter<JSONObject, Pojo>{
             try{
                 //np.getSources().set(i, conversionService.convert(weatherArray.get(i), Pojo.class));
                 np.getSources().add(createPojo((JSONObject) weatherArray.get(i)));
-                System.out.println(np.getSources().get(i));
+                logger.info(np.getSources().get(i));
             }catch (NullPointerException e){
-                System.out.println(e);
+                logger.error(e);
             }
         }
+        logger.info("Created NewsPojo object");
         return np;
     }
 
@@ -72,29 +74,31 @@ public class JsonConverter implements Converter<JSONObject, Pojo>{
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
         request.connect();
+        logger.info("Connected to NewsAPI service");
         request.getInputStream();
         String contents = new String(request.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-
+        logger.info("Retrieved data (json string) from NewsAPI service");
         request.disconnect();
+        logger.info("Disconnected from NewsAPI service");
 
         return contents;
     }
 
-    public static JSONObject parseJSON(InputStream stream) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(stream));
-        String inputLine;
-        StringBuilder content = new StringBuilder();
-        while ((inputLine = in.readLine()) != null) {
-            content.append(inputLine);
-        }
-        in.close();
-
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(content.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObject;
-    }
+//    public static JSONObject parseJSON(InputStream stream) throws IOException {
+//        BufferedReader in = new BufferedReader(new InputStreamReader(stream));
+//        String inputLine;
+//        StringBuilder content = new StringBuilder();
+//        while ((inputLine = in.readLine()) != null) {
+//            content.append(inputLine);
+//        }
+//        in.close();
+//
+//        JSONObject jsonObject = null;
+//        try {
+//            jsonObject = new JSONObject(content.toString());
+//        } catch (JSONException e) {
+//            logger.error(e);
+//        }
+//        return jsonObject;
+//    }
 }

@@ -1,11 +1,9 @@
 package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
-
-import com.thoughtworks.xstream.XStream;
-import ua.edu.sumdu.j2ee.kiptenko.demo.converter.MapEntryConverter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +12,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class XmlGenerator {
+
+    private static final Logger logger = Logger.getLogger(XmlGenerator.class);
 
 //    public Map<String, String> getXml(String baseURLsourses, String apiKey, String keyWord) throws IOException {
 //        String sURL = baseURLsourses + apiKey + keyWord;
@@ -57,12 +57,14 @@ public class XmlGenerator {
     public String getXml(String baseURLsourses, String apiKey, String keyWord) throws IOException {
         String sURL = baseURLsourses + apiKey + keyWord;
 
+        //connecting to NewsAPI service
         URL url = new URL(sURL);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
         request.connect();
+        logger.info("Connected to NewsAPI service");
 
-
+        //retrieving data
         BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String inputLine;
         StringBuilder content = new StringBuilder();
@@ -71,6 +73,7 @@ public class XmlGenerator {
         }
         in.close();
 
+        //creating JSONObject
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(content.toString());
@@ -78,9 +81,12 @@ public class XmlGenerator {
             e.printStackTrace();
         }
 
-        String xml = "<?xml version='1.0' encoding='UTF-8'?>" + "<news>" + XML.toString(jsonObject) + "<news>";
+        //String xml = "<?xml version='1.0' encoding='UTF-8'?>" + "<news>" + XML.toString(jsonObject) + "<news>";
+        String xml = XML.toString(jsonObject);
 
         request.disconnect();
+        logger.info("Disconnected from NewsAPI service");
+
         System.out.println(xml);
         return xml;
     }

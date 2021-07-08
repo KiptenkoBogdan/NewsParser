@@ -1,5 +1,6 @@
 package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -20,6 +21,7 @@ public class DocumentGenerator {
     @Autowired
     private Environment env;
 
+    private static final Logger logger = Logger.getLogger(DocumentGenerator.class);
     private final JsonConverter jc = new JsonConverter();
 
     public ResponseEntity<InputStreamResource> getDocument(String baseURLsourses, String apiKey, String keyWord) throws IOException, URISyntaxException {
@@ -34,6 +36,7 @@ public class DocumentGenerator {
         headers.setContentType(new MediaType("application", "vnd.openxmlformats-officedocument.wordprocessingml.document"));
         headers.setContentLength(doc.length);
         InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(doc));
+        logger.info("Filled in .doc template");
         return ResponseEntity.ok().headers(headers).body(inputStreamResource);
     }
 }
