@@ -30,7 +30,8 @@ public class JsonConverter implements Converter<JSONObject, Pojo>{
         NewsPojo np = new NewsPojo();
         JSONObject newsJsonObject = new JSONObject(json);
 
-        JSONArray weatherArray = (JSONArray) newsJsonObject.get("sources");
+        //JSONArray weatherArray = (JSONArray) newsJsonObject.get("sources");
+        JSONArray weatherArray = (JSONArray) newsJsonObject.get("articles");
         np.setSources(new ArrayList(weatherArray.length()));
 
         for (int i = 0; i < weatherArray.length(); i++){
@@ -49,21 +50,35 @@ public class JsonConverter implements Converter<JSONObject, Pojo>{
     @Override
     public Pojo convert(JSONObject obj) {
         Pojo pojo = new Pojo();
-        pojo.setDescription(obj.getString("description"));
-        pojo.setUrl(obj.getString("url"));
-        pojo.setCategory(obj.getString("category"));
-        pojo.setCountry(obj.getString("country"));
-        pojo.setLanguage(obj.getString("language"));
+        try{
+            pojo.setTitle(obj.optString("title"));
+            pojo.setDescription(obj.optString("description"));
+            pojo.setUrl(obj.optString("url"));
+            pojo.setAuthor(obj.optString("author"));
+            pojo.setUrlToImage(obj.optString("urlToImage"));
+//          pojo.setCategory(obj.optString("category"));
+//          pojo.setCountry(obj.optString("country"));
+//          pojo.setLanguage(obj.optString("language"));
+        } catch (JSONException e){
+            logger.error(e);
+        }
         return pojo;
     }
 
     public static Pojo createPojo(JSONObject obj){
         Pojo pojo = new Pojo();
-        pojo.setDescription(obj.getString("description"));
-        pojo.setUrl(obj.getString("url"));
-        pojo.setCategory(obj.getString("category"));
-        pojo.setCountry(obj.getString("country"));
-        pojo.setLanguage(obj.getString("language"));
+        try{
+            pojo.setTitle(obj.optString("title"));
+            pojo.setDescription(obj.optString("description"));
+            pojo.setUrl(obj.optString("url"));
+            pojo.setAuthor(obj.optString("author"));
+            pojo.setUrlToImage(obj.optString("urlToImage"));
+//          pojo.setCategory(obj.optString("category"));
+//          pojo.setCountry(obj.optString("country"));
+//          pojo.setLanguage(obj.optString("language"));
+        } catch (JSONException e){
+            logger.error(e);
+        }
         return pojo;
     }
 

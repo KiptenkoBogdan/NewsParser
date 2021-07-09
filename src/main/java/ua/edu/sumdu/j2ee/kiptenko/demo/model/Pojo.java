@@ -12,11 +12,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Setter
 @Getter @NoArgsConstructor
 public class Pojo {
+    private String title;
     private String description;
     private String url;
-    private String category;
-    private String country;
-    private String language;
+    private String author;
+    private String urlToImage;
+//    private String category;
+//    private String country;
+//    private String language;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        if(title == null){
+            this.title = " - ";
+        } else{
+            this.title = title;
+        }
+    }
 
     public String getDescription() {
         return description;
@@ -27,34 +42,66 @@ public class Pojo {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        if(description == null){
+            this.description = " - ";
+        } else{
+            this.description = description;
+        }
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        if(url == null){
+            this.url = " - ";
+        } else{
+            this.url = url;
+        }
     }
 
-    public String getCategory() {
-        return category;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setAuthor(String author) {
+        if(author == null){
+            this.author = " - ";
+        } else{
+            this.author = author;
+        }
     }
 
-    public String getCountry() {
-        return country;
+    public String getUrlToImage() {
+        return urlToImage;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setUrlToImage(String urlToImage) {
+        if(urlToImage == null){
+            this.urlToImage = " - ";
+        } else{
+            this.urlToImage = urlToImage;
+        }
     }
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
+//    public String getCategory() {
+//        return category;
+//    }
+//
+//    public void setCategory(String category) {
+//        this.category = category;
+//    }
+//
+//    public String getCountry() {
+//        return country;
+//    }
+//
+//    public void setCountry(String country) {
+//        this.country = country;
+//    }
+//
+//    public String getLanguage() {
+//        return language;
+//    }
+//
+//    public void setLanguage(String language) {
+//        this.language = language;
+//    }
 }
