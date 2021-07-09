@@ -81,8 +81,7 @@ public class XmlGenerator {
             e.printStackTrace();
         }
 
-        //String xml = "<?xml version='1.0' encoding='UTF-8'?>" + "<news>" + XML.toString(jsonObject) + "<news>";
-        String xml = XML.toString(jsonObject);
+        String xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" + "<news>" + XML.toString(jsonObject) + "</news>";
 
         request.disconnect();
         logger.info("Disconnected from NewsAPI service");
