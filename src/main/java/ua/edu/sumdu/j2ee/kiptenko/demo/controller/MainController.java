@@ -41,7 +41,7 @@ public class MainController {
         ResponseEntity<InputStreamResource> result = null;
         try {
             result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e);
         }
         return result;
@@ -53,7 +53,7 @@ public class MainController {
         ResponseEntity<InputStreamResource> result = null;
         try {
             result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e);
         }
         return result;
@@ -65,7 +65,7 @@ public class MainController {
         ResponseEntity<InputStreamResource> result = null;
         try {
             result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             logger.error(e);
         }
         return result;
