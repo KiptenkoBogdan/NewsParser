@@ -8,18 +8,22 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import ua.edu.sumdu.j2ee.kiptenko.demo.model.NewsPojo;
 
-public class TemplateGenerator {
+@Component
+public class NewsPojoToDocTemplate implements Converter<NewsPojo, byte[]> {
 
-    private static final Logger logger = Logger.getLogger(TemplateGenerator.class);
+    private static final Logger logger = Logger.getLogger(NewsPojoToDocTemplate.class);
 
-    public static byte[] generateTemplate(NewsPojo nptest) throws IOException, URISyntaxException {
+    @Override
+    public byte[] convert(NewsPojo nptest){
         XWPFDocument document = new XWPFDocument();
         File template;
         FileOutputStream out;
         try{
-            template = new File(TemplateGenerator.class.getClassLoader().getResource("template.docx").toURI());
+            template = new File(NewsPojoToDocTemplate.class.getClassLoader().getResource("template.docx").toURI());
             if(!template.exists()){
                 template.createNewFile();
             }else{
@@ -42,17 +46,11 @@ public class TemplateGenerator {
                 run.addCarriageReturn();
                 run.setText("\nRelated Image: " + nptest.getSources().get(i).getUrlToImage());
                 run.addCarriageReturn();
-//                run.setText("\nCategory: " + nptest.getSources().get(i).getCategory());
-//                run.addCarriageReturn();
-//                run.setText("\nCountry: " + nptest.getSources().get(i).getCountry());
-//                run.addCarriageReturn();
-//                run.setText("\nLanguage: " + nptest.getSources().get(i).getLanguage());
-//                run.addCarriageReturn();
                 run.addCarriageReturn();
             }
             document.write(out);
             out.close();
-        } catch (NullPointerException | FileNotFoundException e){
+        } catch (NullPointerException | IOException | URISyntaxException e){
             logger.error(e);
         }
 
