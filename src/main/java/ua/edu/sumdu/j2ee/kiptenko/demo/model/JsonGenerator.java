@@ -3,6 +3,7 @@ package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +12,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-public class JsonGenerator {
+@Component
+public class JsonGenerator implements IJsonGenerator{
 
     private static final Logger logger = Logger.getLogger(JsonGenerator.class);
 

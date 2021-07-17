@@ -10,19 +10,23 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import ua.edu.sumdu.j2ee.kiptenko.demo.converter.NewsPojoToDocTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-@PropertySource({"classpath:application.properties"})
-public class DocumentGenerator {
+//@PropertySource({"classpath:application.properties"})
+@Component
+public class DocumentGenerator implements IDocumentGenerator{
 
-    @Autowired
-    private Environment env;
+//    @Autowired
+//    private Environment env;
 
     private static final Logger logger = Logger.getLogger(DocumentGenerator.class);
-    private final PojoGenerator pg = new PojoGenerator();
+
+    @Autowired
+    private IPojoGenerator pg;
 
     public ResponseEntity<InputStreamResource> getDocument(String baseURLsourses, String apiKey, String keyWord) throws IOException{
         String str = pg.getStringJson(baseURLsourses, apiKey, keyWord);

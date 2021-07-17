@@ -10,12 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ua.edu.sumdu.j2ee.kiptenko.demo.model.DocumentGenerator;
-import ua.edu.sumdu.j2ee.kiptenko.demo.model.JsonGenerator;
-import ua.edu.sumdu.j2ee.kiptenko.demo.model.XmlGenerator;
+import ua.edu.sumdu.j2ee.kiptenko.demo.model.*;
+
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.util.Map;
 
 @RestController
@@ -27,9 +25,13 @@ public class MainController {
     private Environment env;
 
     private static final Logger logger = Logger.getLogger(MainController.class);
-    private DocumentGenerator docGen = new DocumentGenerator();
-    private JsonGenerator jsonGen = new JsonGenerator();
-    private XmlGenerator xmlGen = new XmlGenerator();
+
+    @Autowired
+    private IDocumentGenerator docGen;
+    @Autowired
+    private IJsonGenerator jsonGen;
+    @Autowired
+    private IXmlGenerator xmlGen;
 
     //private static String baseURLsources = "https://newsapi.org/v2/sources";
     //private static String apiKey = "?apiKey=629909da42254cd28c952adb9d926de4";

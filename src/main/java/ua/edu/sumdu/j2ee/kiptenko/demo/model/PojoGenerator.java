@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.GenericConversionService;
+import org.springframework.stereotype.Component;
 import ua.edu.sumdu.j2ee.kiptenko.demo.converter.JSONObjectToPojo;
 
 import java.io.IOException;
@@ -14,7 +15,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class PojoGenerator{
+@Component
+public class PojoGenerator implements IPojoGenerator{
 
     private static final Logger logger = Logger.getLogger(PojoGenerator.class);
 
@@ -42,7 +44,7 @@ public class PojoGenerator{
         return np;
     }
 
-    public static Pojo createPojo(JSONObject obj){
+    public Pojo createPojo(JSONObject obj){
         Pojo pojo = new Pojo();
         try{
             pojo.setTitle(obj.optString("title"));
