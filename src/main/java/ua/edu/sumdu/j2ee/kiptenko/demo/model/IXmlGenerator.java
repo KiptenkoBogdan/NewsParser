@@ -6,5 +6,5 @@ import java.io.IOException;
 
 @Component
 public interface IXmlGenerator {
-    String getXml(String baseURLsourses, String apiKey, String keyWord) throws IOException;
+    String getXml(String keyWord) throws IOException;
 }

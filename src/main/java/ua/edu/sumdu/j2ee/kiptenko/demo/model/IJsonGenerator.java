@@ -7,5 +7,5 @@ import java.util.Map;
 
 @Component
 public interface IJsonGenerator {
-    Map<String, Object> getJson(String baseURLsourses, String apiKey, String keyWord) throws IOException;
+    Map<String, Object> getJson(String keyWord) throws IOException;
 }

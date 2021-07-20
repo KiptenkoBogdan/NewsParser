@@ -3,6 +3,7 @@ package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -17,8 +18,15 @@ public class JsonGenerator implements IJsonGenerator{
 
     private static final Logger logger = Logger.getLogger(JsonGenerator.class);
 
-    public Map<String, Object> getJson(String baseURLsourses, String apiKey, String keyWord) throws IOException {
-        String sURL = baseURLsourses + apiKey + keyWord;
+    @Value("${baseURLsources}")
+    private String baseURLsources;
+
+    @Value("${apiKey}")
+    private String apiKey;
+
+
+    public Map<String, Object> getJson(String keyWord) throws IOException {
+        String sURL = baseURLsources + apiKey + keyWord;
 
         //connecting to NewsAPI service
         URL url = new URL(sURL);

@@ -9,5 +9,5 @@ import java.io.IOException;
 public interface IPojoGenerator {
     NewsPojo createObject(String json);
     Pojo createPojo(JSONObject obj);
-    String getStringJson(String baseURLsources, String apiKey, String parameters) throws IOException;
+    String getStringJson(String parameters) throws IOException;
 }

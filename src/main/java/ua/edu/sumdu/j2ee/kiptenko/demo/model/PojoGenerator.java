@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,12 @@ import java.util.ArrayList;
 public class PojoGenerator implements IPojoGenerator{
 
     private static final Logger logger = Logger.getLogger(PojoGenerator.class);
+
+    @Value("${baseURLsources}")
+    private String baseURLsources;
+
+    @Value("${apiKey}")
+    private String apiKey;
 
     public NewsPojo createObject(String json){
 
@@ -58,7 +65,7 @@ public class PojoGenerator implements IPojoGenerator{
         return pojo;
     }
 
-    public String getStringJson(String baseURLsources, String apiKey, String parameters) throws IOException {
+    public String getStringJson(String parameters) throws IOException {
         String sURL = baseURLsources + apiKey + parameters;
 
         URL url = new URL(sURL);

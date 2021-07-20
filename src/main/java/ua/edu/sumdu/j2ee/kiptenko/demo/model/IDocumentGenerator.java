@@ -8,5 +8,5 @@ import java.io.IOException;
 
 @Component
 public interface IDocumentGenerator {
-    ResponseEntity<InputStreamResource> getDocument(String baseURLsourses, String apiKey, String keyWord) throws IOException;
+    ResponseEntity<InputStreamResource> getDocument(String keyWord) throws IOException;
 }

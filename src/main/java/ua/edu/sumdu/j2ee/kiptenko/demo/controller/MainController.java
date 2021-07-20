@@ -42,7 +42,7 @@ public class MainController {
             @RequestParam(value = "category", defaultValue = "sports") String category) {
         ResponseEntity<InputStreamResource> result = null;
         try {
-            result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+            result = docGen.getDocument("&category=" + category);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -54,7 +54,7 @@ public class MainController {
             @RequestParam(value = "language", defaultValue = "ua") String language) {
         ResponseEntity<InputStreamResource> result = null;
         try {
-            result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
+            result = docGen.getDocument("&language=" + language);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -66,7 +66,7 @@ public class MainController {
             @RequestParam(value = "country", defaultValue = "ua") String country) {
         ResponseEntity<InputStreamResource> result = null;
         try {
-            result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
+            result = docGen.getDocument("&country=" + country);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -80,7 +80,7 @@ public class MainController {
     public Map<String, Object> getNewsByCategoryJson(@RequestParam(value = "category", defaultValue = "sports") String category) {
         Map<String, Object> result = null;
         try {
-            result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+            result = jsonGen.getJson("&category=" + category);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -91,7 +91,7 @@ public class MainController {
     public Map<String, Object> getNewsByLanguageJson(@RequestParam(value = "language", defaultValue = "ua") String language) {
         Map<String, Object> result = null;
         try {
-            result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
+            result = jsonGen.getJson("&language=" + language);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -102,7 +102,7 @@ public class MainController {
     public Map<String, Object> getNewsByCountryJson(@RequestParam(value = "country", defaultValue = "ua") String country) {
         Map<String, Object> result = null;
         try {
-            result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
+            result = jsonGen.getJson("&country=" + country);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -118,7 +118,7 @@ public class MainController {
     public String getNewsByCategoryXML(@RequestParam(value = "category", defaultValue = "sports") String category) {
         String result = null;
         try {
-            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+            result = xmlGen.getXml("&category=" + category);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -129,7 +129,7 @@ public class MainController {
     public String getNewsByLanguageXML(@RequestParam(value = "language", defaultValue = "ua") String language) {
         String result = null;
         try {
-            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
+            result = xmlGen.getXml("&language=" + language);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -140,7 +140,7 @@ public class MainController {
     public String getNewsByCountryXML(@RequestParam(value = "country", defaultValue = "ua") String country) {
         String result = null;
         try {
-            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
+            result = xmlGen.getXml("&country=" + country);
         } catch (IOException e) {
             logger.error(e);
         }

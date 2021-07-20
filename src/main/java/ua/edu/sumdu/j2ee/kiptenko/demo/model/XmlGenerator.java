@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -17,8 +18,14 @@ public class XmlGenerator implements IXmlGenerator{
 
     private static final Logger logger = Logger.getLogger(XmlGenerator.class);
 
-    public String getXml(String baseURLsourses, String apiKey, String keyWord) throws IOException {
-        String sURL = baseURLsourses + apiKey + keyWord;
+    @Value("${baseURLsources}")
+    private String baseURLsources;
+
+    @Value("${apiKey}")
+    private String apiKey;
+
+    public String getXml(String keyWord) throws IOException {
+        String sURL = baseURLsources + apiKey + keyWord;
 
         //connecting to NewsAPI service
         URL url = new URL(sURL);

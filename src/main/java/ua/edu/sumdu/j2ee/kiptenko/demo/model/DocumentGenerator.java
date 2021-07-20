@@ -2,6 +2,7 @@ package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.GenericConversionService;
@@ -25,11 +26,17 @@ public class DocumentGenerator implements IDocumentGenerator{
 
     private static final Logger logger = Logger.getLogger(DocumentGenerator.class);
 
+    @Value("${baseURLsources}")
+    private String baseURLsources;
+
+    @Value("${apiKey}")
+    private String apiKey;
+
     @Autowired
     private IPojoGenerator pg;
 
-    public ResponseEntity<InputStreamResource> getDocument(String baseURLsourses, String apiKey, String keyWord) throws IOException{
-        String str = pg.getStringJson(baseURLsourses, apiKey, keyWord);
+    public ResponseEntity<InputStreamResource> getDocument(String keyWord) throws IOException{
+        String str = pg.getStringJson(keyWord);
         NewsPojo nptest = pg.createObject(str);
 
         GenericConversionService conversionService = new GenericConversionService();
