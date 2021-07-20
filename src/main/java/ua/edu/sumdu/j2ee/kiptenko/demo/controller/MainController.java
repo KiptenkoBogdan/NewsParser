@@ -76,7 +76,7 @@ public class MainController {
     // localhost:8080/getJSON/bycategory?category=sports
 
     //News in JSON format
-    @RequestMapping(value = "/getJSON/bycategory")
+    @RequestMapping(value = "/getJSON/bycategory", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> getNewsByCategoryJson(@RequestParam(value = "category", defaultValue = "sports") String category) {
         Map<String, Object> result = null;
         try {
@@ -87,7 +87,7 @@ public class MainController {
         return result;
     }
 
-    @RequestMapping(value = "/getJSON/bylanguage")
+    @RequestMapping(value = "/getJSON/bylanguage", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> getNewsByLanguageJson(@RequestParam(value = "language", defaultValue = "ua") String language) {
         Map<String, Object> result = null;
         try {
@@ -98,7 +98,7 @@ public class MainController {
         return result;
     }
 
-    @RequestMapping(value = "/getJSON/bycountry")
+    @RequestMapping(value = "/getJSON/bycountry", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> getNewsByCountryJson(@RequestParam(value = "country", defaultValue = "ua") String country) {
         Map<String, Object> result = null;
         try {
