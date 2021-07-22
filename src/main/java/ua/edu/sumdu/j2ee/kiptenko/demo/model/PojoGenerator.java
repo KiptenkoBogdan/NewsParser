@@ -2,7 +2,6 @@ package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
@@ -27,10 +26,11 @@ public class PojoGenerator implements IPojoGenerator{
     @Value("${apiKey}")
     private String apiKey;
 
-    public NewsPojo createObject(String json){
+    public NewsPojo createObject(String keyWord) throws IOException {
 
         NewsPojo np = new NewsPojo();
-        JSONObject newsJsonObject = new JSONObject(json);
+        String str = getStringJson(keyWord);
+        JSONObject newsJsonObject = new JSONObject(str);
 
         GenericConversionService conversionService = new GenericConversionService();
         Converter<JSONObject, Pojo> customConverter = new JSONObjectToPojo();
@@ -42,27 +42,13 @@ public class PojoGenerator implements IPojoGenerator{
         for (int i = 0; i < weatherArray.length(); i++){
             try{
                 np.getSources().add(conversionService.convert(weatherArray.get(i), Pojo.class));
-                logger.info(np.getSources().get(i));
+                //logger.info(np.getSources().get(i));
             }catch (NullPointerException e){
                 logger.error(e);
             }
         }
         logger.info("Created NewsPojo object");
         return np;
-    }
-
-    public Pojo createPojo(JSONObject obj){
-        Pojo pojo = new Pojo();
-        try{
-            pojo.setTitle(obj.optString("title"));
-            pojo.setDescription(obj.optString("description"));
-            pojo.setUrl(obj.optString("url"));
-            pojo.setAuthor(obj.optString("author"));
-            pojo.setUrlToImage(obj.optString("urlToImage"));
-        } catch (JSONException e){
-            logger.error(e);
-        }
-        return pojo;
     }
 
     public String getStringJson(String parameters) throws IOException {
