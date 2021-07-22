@@ -2,31 +2,33 @@ package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.GenericConversionService;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import ua.edu.sumdu.j2ee.kiptenko.demo.converter.NewsPojoToDocTemplate;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
-@PropertySource({"classpath:application.properties"})
-public class DocumentGenerator {
-
-    @Autowired
-    private Environment env;
+@Component
+public class DocumentGenerator implements IDocumentGenerator{
 
     private static final Logger logger = Logger.getLogger(DocumentGenerator.class);
-    private final PojoGenerator pg = new PojoGenerator();
 
-    public ResponseEntity<InputStreamResource> getDocument(String baseURLsourses, String apiKey, String keyWord) throws IOException{
-        String str = pg.getStringJson(baseURLsourses, apiKey, keyWord);
-        NewsPojo nptest = pg.createObject(str);
+    @Value("${baseURLsources}")
+    private String baseURLsources;
+
+    @Value("${apiKey}")
+    private String apiKey;
+
+    @Autowired
+    private IPojoGenerator pg;
+
+    public ResponseEntity<InputStreamResource> getDocument(NewsPojo nptest) {
 
         GenericConversionService conversionService = new GenericConversionService();
         Converter<NewsPojo, byte[]> customConverter = new NewsPojoToDocTemplate();

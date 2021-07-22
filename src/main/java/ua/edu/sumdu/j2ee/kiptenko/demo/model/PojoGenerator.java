@@ -2,10 +2,11 @@ package ua.edu.sumdu.j2ee.kiptenko.demo.model;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.GenericConversionService;
+import org.springframework.stereotype.Component;
 import ua.edu.sumdu.j2ee.kiptenko.demo.converter.JSONObjectToPojo;
 
 import java.io.IOException;
@@ -14,14 +15,22 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class PojoGenerator{
+@Component
+public class PojoGenerator implements IPojoGenerator{
 
     private static final Logger logger = Logger.getLogger(PojoGenerator.class);
 
-    public NewsPojo createObject(String json){
+    @Value("${baseURLsources}")
+    private String baseURLsources;
+
+    @Value("${apiKey}")
+    private String apiKey;
+
+    public NewsPojo createObject(String keyWord) throws IOException {
 
         NewsPojo np = new NewsPojo();
-        JSONObject newsJsonObject = new JSONObject(json);
+        String str = getStringJson(keyWord);
+        JSONObject newsJsonObject = new JSONObject(str);
 
         GenericConversionService conversionService = new GenericConversionService();
         Converter<JSONObject, Pojo> customConverter = new JSONObjectToPojo();
@@ -33,7 +42,7 @@ public class PojoGenerator{
         for (int i = 0; i < weatherArray.length(); i++){
             try{
                 np.getSources().add(conversionService.convert(weatherArray.get(i), Pojo.class));
-                logger.info(np.getSources().get(i));
+                //logger.info(np.getSources().get(i));
             }catch (NullPointerException e){
                 logger.error(e);
             }
@@ -42,21 +51,7 @@ public class PojoGenerator{
         return np;
     }
 
-    public static Pojo createPojo(JSONObject obj){
-        Pojo pojo = new Pojo();
-        try{
-            pojo.setTitle(obj.optString("title"));
-            pojo.setDescription(obj.optString("description"));
-            pojo.setUrl(obj.optString("url"));
-            pojo.setAuthor(obj.optString("author"));
-            pojo.setUrlToImage(obj.optString("urlToImage"));
-        } catch (JSONException e){
-            logger.error(e);
-        }
-        return pojo;
-    }
-
-    public String getStringJson(String baseURLsources, String apiKey, String parameters) throws IOException {
+    public String getStringJson(String parameters) throws IOException {
         String sURL = baseURLsources + apiKey + parameters;
 
         URL url = new URL(sURL);

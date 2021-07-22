@@ -10,26 +10,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ua.edu.sumdu.j2ee.kiptenko.demo.model.DocumentGenerator;
-import ua.edu.sumdu.j2ee.kiptenko.demo.model.JsonGenerator;
-import ua.edu.sumdu.j2ee.kiptenko.demo.model.XmlGenerator;
+import ua.edu.sumdu.j2ee.kiptenko.demo.model.*;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.util.Map;
 
 @RestController
 @PropertySource({"classpath:application.properties"})
 public class MainController {
 
-    // localhost:8080/getDocument/bycategory?category=sports
     @Autowired
     private Environment env;
 
     private static final Logger logger = Logger.getLogger(MainController.class);
-    private DocumentGenerator docGen = new DocumentGenerator();
-    private JsonGenerator jsonGen = new JsonGenerator();
-    private XmlGenerator xmlGen = new XmlGenerator();
+
+    @Autowired
+    private IDocumentGenerator docGen;
+    @Autowired
+    private IPojoGenerator pg;
 
     //private static String baseURLsources = "https://newsapi.org/v2/sources";
     //private static String apiKey = "?apiKey=629909da42254cd28c952adb9d926de4";
@@ -39,8 +36,10 @@ public class MainController {
     public ResponseEntity<InputStreamResource> getNewsByCategoryDoc(
             @RequestParam(value = "category", defaultValue = "sports") String category) {
         ResponseEntity<InputStreamResource> result = null;
+        NewsPojo np = null;
         try {
-            result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+            np = pg.createObject("&category=" + category);
+            result = docGen.getDocument(np);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -51,8 +50,10 @@ public class MainController {
     public ResponseEntity<InputStreamResource> getNewsByLanguageDoc(
             @RequestParam(value = "language", defaultValue = "ua") String language) {
         ResponseEntity<InputStreamResource> result = null;
+        NewsPojo np = null;
         try {
-            result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
+            np = pg.createObject("&language=" + language);
+            result = docGen.getDocument(np);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -63,8 +64,10 @@ public class MainController {
     public ResponseEntity<InputStreamResource> getNewsByCountryDoc(
             @RequestParam(value = "country", defaultValue = "ua") String country) {
         ResponseEntity<InputStreamResource> result = null;
+        NewsPojo np = null;
         try {
-            result = docGen.getDocument(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
+            np = pg.createObject("&country=" + country);
+            result = docGen.getDocument(np);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -74,33 +77,34 @@ public class MainController {
     // localhost:8080/getJSON/bycategory?category=sports
 
     //News in JSON format
-    @RequestMapping(value = "/getJSON/bycategory")
-    public Map<String, Object> getNewsByCategoryJson(@RequestParam(value = "category", defaultValue = "sports") String category) {
-        Map<String, Object> result = null;
+
+    @RequestMapping(value = "/getJSON/bycategory", produces = MediaType.APPLICATION_JSON_VALUE)
+    public NewsPojo getNewsByCategoryJson(@RequestParam(value = "category", defaultValue = "sports") String category) {
+        NewsPojo result = null;
         try {
-            result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+            result = pg.createObject("&category=" + category);
         } catch (IOException e) {
             logger.error(e);
         }
         return result;
     }
 
-    @RequestMapping(value = "/getJSON/bylanguage")
-    public Map<String, Object> getNewsByLanguageJson(@RequestParam(value = "language", defaultValue = "ua") String language) {
-        Map<String, Object> result = null;
+    @RequestMapping(value = "/getJSON/bylanguage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public NewsPojo  getNewsByLanguageJson(@RequestParam(value = "language", defaultValue = "ua") String language) {
+        NewsPojo result = null;
         try {
-            result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
+            result = pg.createObject("&language=" + language);
         } catch (IOException e) {
             logger.error(e);
         }
         return result;
     }
 
-    @RequestMapping(value = "/getJSON/bycountry")
-    public Map<String, Object> getNewsByCountryJson(@RequestParam(value = "country", defaultValue = "ua") String country) {
-        Map<String, Object> result = null;
+    @RequestMapping(value = "/getJSON/bycountry", produces = MediaType.APPLICATION_JSON_VALUE)
+    public NewsPojo  getNewsByCountryJson(@RequestParam(value = "country", defaultValue = "ua") String country) {
+        NewsPojo result = null;
         try {
-            result = jsonGen.getJson(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
+            result = pg.createObject("&country=" + country);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -113,10 +117,10 @@ public class MainController {
     //News in XML format
 
     @RequestMapping(value = "/getXML/bycategory", produces = MediaType.APPLICATION_XML_VALUE)
-    public String getNewsByCategoryXML(@RequestParam(value = "category", defaultValue = "sports") String category) {
-        String result = null;
+    public NewsPojo getNewsByCategoryXML(@RequestParam(value = "category", defaultValue = "sports") String category) {
+        NewsPojo result = null;
         try {
-            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
+            result = pg.createObject("&category=" + category);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -124,10 +128,10 @@ public class MainController {
     }
 
     @RequestMapping(value = "/getXML/bylanguage", produces = MediaType.APPLICATION_XML_VALUE)
-    public String getNewsByLanguageXML(@RequestParam(value = "language", defaultValue = "ua") String language) {
-        String result = null;
+    public NewsPojo getNewsByLanguageXML(@RequestParam(value = "language", defaultValue = "ua") String language) {
+        NewsPojo result = null;
         try {
-            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
+            result = pg.createObject("&language=" + language);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -135,47 +139,13 @@ public class MainController {
     }
 
     @RequestMapping(value = "/getXML/bycountry", produces = MediaType.APPLICATION_XML_VALUE)
-    public String getNewsByCountryXML(@RequestParam(value = "country", defaultValue = "ua") String country) {
-        String result = null;
+    public NewsPojo getNewsByCountryXML(@RequestParam(value = "country", defaultValue = "ua") String country) {
+        NewsPojo result = null;
         try {
-            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
+            result = pg.createObject("&country=" + country);
         } catch (IOException e) {
             logger.error(e);
         }
         return result;
     }
-
-//    @RequestMapping(value = "/getXML/bycategory")
-//    public Map<String, String> getNewsByCategoryXML(@RequestParam(value = "category", defaultValue = "sports") String category) {
-//        Map<String, String> result = null;
-//        try {
-//            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&category=" + category);
-//        } catch (IOException e) {
-//            logger.error(e);
-//        }
-//        return result;
-//    }
-//
-//    @RequestMapping(value = "/getXML/bylanguage")
-//    public Map<String, String> getNewsByLanguageXML(@RequestParam(value = "language", defaultValue = "ua") String language) {
-//        Map<String, String> result = null;
-//        try {
-//            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&language=" + language);
-//        } catch (IOException e) {
-//            logger.error(e);
-//        }
-//        return result;
-//    }
-//
-//    @RequestMapping(value = "/getXML/bycountry")
-//    public Map<String, String> getNewsByCountryXML(@RequestParam(value = "country", defaultValue = "ua") String country) {
-//        Map<String, String> result = null;
-//        try {
-//            result = xmlGen.getXml(env.getProperty("baseURLsources"), env.getProperty("apiKey"),"&country=" + country);
-//        } catch (IOException e) {
-//            logger.error(e);
-//        }
-//        return result;
-//    }
-
 }
